@@ -1,5 +1,6 @@
 // Configuración global para las pruebas
 const { sequelize, Participante, Evento, Asistencia } = require('../models');
+const cache = require('memory-cache');
 
 beforeAll(async () => {
   // Sincronizar la base de datos antes de ejecutar las pruebas
@@ -30,4 +31,7 @@ afterEach(async () => {
     // Si hay error, intentar con truncate
     await sequelize.query('TRUNCATE TABLE asistencias, participantes, eventos RESTART IDENTITY CASCADE');
   }
+
+  // Limpiar el caché después de cada prueba
+  cache.clear();
 });

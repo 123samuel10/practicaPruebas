@@ -8,7 +8,8 @@ describe('API Participantes - Pruebas de Integración', () => {
       const nuevoParticipante = {
         nombre: 'Juan Pérez',
         correo: 'juan@example.com',
-        telefono: '1234567890'
+        telefono: '1234567890',
+        contraseña: 'password123'
       };
 
       const response = await request(app)
@@ -37,7 +38,8 @@ describe('API Participantes - Pruebas de Integración', () => {
     it('debería retornar 400 si el correo ya existe', async () => {
       const participante = {
         nombre: 'Juan Pérez',
-        correo: 'juan@example.com'
+        correo: 'juan@example.com',
+        contraseña: 'password123'
       };
 
       await request(app)
@@ -67,11 +69,13 @@ describe('API Participantes - Pruebas de Integración', () => {
     it('debería retornar todos los participantes', async () => {
       await Participante.create({
         nombre: 'Juan Pérez',
-        correo: 'juan@example.com'
+        correo: 'juan@example.com',
+        contraseña: 'password123'
       });
       await Participante.create({
         nombre: 'María García',
-        correo: 'maria@example.com'
+        correo: 'maria@example.com',
+        contraseña: 'password123'
       });
 
       const response = await request(app)
@@ -86,7 +90,8 @@ describe('API Participantes - Pruebas de Integración', () => {
     it('debería retornar un participante por su ID', async () => {
       const participante = await Participante.create({
         nombre: 'Juan Pérez',
-        correo: 'juan@example.com'
+        correo: 'juan@example.com',
+        contraseña: 'password123'
       });
 
       const response = await request(app)
@@ -110,7 +115,8 @@ describe('API Participantes - Pruebas de Integración', () => {
     it('debería actualizar un participante existente', async () => {
       const participante = await Participante.create({
         nombre: 'Juan Pérez',
-        correo: 'juan@example.com'
+        correo: 'juan@example.com',
+        contraseña: 'password123'
       });
 
       const datosActualizados = {
@@ -144,7 +150,8 @@ describe('API Participantes - Pruebas de Integración', () => {
     it('debería eliminar un participante existente', async () => {
       const participante = await Participante.create({
         nombre: 'Juan Pérez',
-        correo: 'juan@example.com'
+        correo: 'juan@example.com',
+        contraseña: 'password123'
       });
 
       const response = await request(app)

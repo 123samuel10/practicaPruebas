@@ -33,7 +33,7 @@ module.exports = {
     try {
       const resultado = await participanteService.actualizarParticipante(req.params.id, req.body);
       if (!resultado[0]) return res.status(404).json({ error: "Participante no encontrado" });
-      res.status(200).json({ mensaje: "Participante actualizado" });
+      res.status(200).json({ message: "Participante actualizado" });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
@@ -43,7 +43,7 @@ module.exports = {
     try {
       const resultado = await participanteService.eliminarParticipante(req.params.id);
       if (!resultado) return res.status(404).json({ error: "Participante no encontrado" });
-      res.status(200).json({ mensaje: "Participante eliminado" });
+      res.status(200).json({ message: "Participante eliminado" });
     } catch (error) {
       res.status(500).json({ error: "Error al eliminar el participante." });
     }

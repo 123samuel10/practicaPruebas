@@ -33,7 +33,7 @@ module.exports = {
     try {
       const resultado = await eventoService.actualizarEvento(req.params.id, req.body);
       if (!resultado[0]) return res.status(404).json({ error: "Evento no encontrado" });
-      res.status(200).json({ mensaje: "Evento actualizado" });
+      res.status(200).json({ message: "Evento actualizado" });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
@@ -43,7 +43,7 @@ module.exports = {
     try {
       const resultado = await eventoService.eliminarEvento(req.params.id);
       if (!resultado) return res.status(404).json({ error: "Evento no encontrado" });
-      res.status(200).json({ mensaje: "Evento eliminado" });
+      res.status(200).json({ message: "Evento eliminado" });
     } catch (error) {
       res.status(500).json({ error: "Error al eliminar el evento." });
     }

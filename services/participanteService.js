@@ -12,6 +12,10 @@ module.exports = {
       throw new Error("El nombre y el correo son obligatorios.");
     }
 
+    if (!datos.contraseña) {
+      throw new Error("La contraseña es obligatoria.");
+    }
+
     const existente = await Participante.findOne({ where: { correo: datos.correo } });
     if (existente) {
       throw new Error("Ya existe un participante con este correo.");
