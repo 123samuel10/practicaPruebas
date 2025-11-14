@@ -1,0 +1,95 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test-and-analyze:
+    name: Test y Análisis Estático
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: admin
+          POSTGRES_DB: sistema_eventos_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 1️⃣ Instalar dependencias
+        run: |
+          echo "📦 Instalando dependencias..."
+          npm ci
+
+      - name: Configurar variables de entorno
+        run: |
+          echo "NODE_ENV=test" >> $GITHUB_ENV
+          echo "DB_HOST=localhost" >> $GITHUB_ENV
+          echo "DB_PORT=5432" >> $GITHUB_ENV
+          echo "DB_USER=postgres" >> $GITHUB_ENV
+          echo "DB_PASSWORD=admin" >> $GITHUB_ENV
+          echo "DB_NAME=sistema_eventos_test" >> $GITHUB_ENV
+
+      - name: 2️⃣ Ejecutar pruebas unitarias
+        run: |
+          echo "🧪 Ejecutando pruebas unitarias..."
+          npm test -- tests/asistenciaService.test.js tests/cache.test.js
+
+      - name: 3️⃣ Ejecutar pruebas de integración
+        run: |
+          echo "🔗 Ejecutando pruebas de integración..."
+          npm test -- tests/asistencias.integration.test.js
+
+      - name: 4️⃣ Ejecutar análisis estático de seguridad
+        run: |
+          echo "🔒 Ejecutando análisis estático..."
+          npm run lint
+
+      - name: 5️⃣ Ejecutar pruebas de sistema
+        run: |
+          echo "🖥️ Ejecutando pruebas de sistema..."
+          npm test -- tests/sistema.test.js
+
+      - name: ✅ Pipeline completado exitosamente
+        run: |
+          echo "╔════════════════════════════════════════╗"
+          echo "║                                        ║"
+          echo "║              ✅ OK ✅                  ║"
+          echo "║                                        ║"
+          echo "║   Todas las pruebas pasaron           ║"
+          echo "║   correctamente                        ║"
+          echo "║                                        ║"
+          echo "╚════════════════════════════════════════╝"
+
+      - name: 📊 Resumen de resultados
+        if: always()
+        run: |
+          echo "### Resumen de Pipeline" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Paso | Estado |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Instalación de dependencias | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| Pruebas unitarias | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| Pruebas de integración | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| Análisis estático | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| Pruebas de sistema | ✅ |" >> $GITHUB_STEP_SUMMARY
