@@ -1,19 +1,19 @@
 {
   "development": {
-    "username": "postgres",
+    "username": "root",
     "password": "admin",
     "database": "sistema_eventos",
     "host": "127.0.0.1",
-    "port": 5432,
-    "dialect": "postgres"
+    "port": 3306,
+    "dialect": "mysql"
   },
   "test": {
-    "username": "postgres",
+    "username": "root",
     "password": "admin",
     "database": "sistema_eventos_test",
     "host": "127.0.0.1",
-    "port": 5432,
-    "dialect": "postgres",
+    "port": 3306,
+    "dialect": "mysql",
     "logging": false
   }
 }

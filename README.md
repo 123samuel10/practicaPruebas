@@ -1,6 +1,6 @@
 # Sistema de Gestión de Eventos - API REST
 
-API REST para la gestión de eventos, participantes y asistencias, construida con Node.js, Express y PostgreSQL siguiendo la arquitectura MVC.
+API REST para la gestión de eventos, participantes y asistencias, construida con Node.js, Express y MySQL siguiendo la arquitectura MVC.
 
 ---
 
@@ -21,7 +21,7 @@ API REST para la gestión de eventos, participantes y asistencias, construida co
 ### Prerequisitos
 
 - Node.js >= 18
-- PostgreSQL >= 14
+- MySQL >= 8.0
 - npm o yarn
 
 ### Pasos
@@ -43,8 +43,8 @@ Crear archivo `.env` en la raíz:
 ```env
 NODE_ENV=development
 DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
+DB_PORT=3306
+DB_USER=root
 DB_PASSWORD=tu_contraseña
 DB_NAME=sistema_eventos
 DB_NAME_TEST=sistema_eventos_test
@@ -53,10 +53,10 @@ DB_NAME_TEST=sistema_eventos_test
 4. **Crear base de datos**
 ```bash
 # Base de datos de desarrollo
-psql -U postgres -c "CREATE DATABASE sistema_eventos;"
+mysql -u root -p -e "CREATE DATABASE sistema_eventos;"
 
 # Base de datos de pruebas
-psql -U postgres -c "CREATE DATABASE sistema_eventos_test;"
+mysql -u root -p -e "CREATE DATABASE sistema_eventos_test;"
 ```
 
 5. **Ejecutar migraciones**
@@ -76,6 +76,10 @@ npm start
 ```
 
 El servidor estará disponible en `http://localhost:3000`
+
+### Funcionamiento
+
+![Funcionamiento de la aplicación](fotos/funcionamiento.png)
 
 ---
 
@@ -97,7 +101,7 @@ Este proyecto sigue el patrón **MVC (Modelo-Vista-Controlador)** adaptado para 
                                                                            │
                                                                            ▼
                                                                     ┌──────────────┐
-                                                                    │  PostgreSQL  │
+                                                                    │    MySQL     │
                                                                     └──────────────┘
 ```
 
@@ -155,8 +159,8 @@ practicaPruebas/
 ### Backend
 - **Node.js** - Entorno de ejecución
 - **Express 5** - Framework web
-- **Sequelize** - ORM para PostgreSQL
-- **PostgreSQL** - Base de datos relacional
+- **Sequelize** - ORM para MySQL
+- **MySQL** - Base de datos relacional
 
 ### Caché
 - **memory-cache** - Sistema de caché en memoria (TTL: 60s)
@@ -193,6 +197,10 @@ npm test -- tests/asistencias.integration.test.js
 npm test -- tests/sistema.test.js
 ```
 
+### Resultado de las Pruebas
+
+![Ejecución de pruebas](fotos/ejecuciontest.png)
+
 
 ## Seguridad
 
@@ -227,6 +235,9 @@ El proyecto incluye un workflow de GitHub Actions que ejecuta automáticamente:
 4. Análisis estático de seguridad
 5. Pruebas de sistema
 
+### Pipeline en Acción
+
+![Pipeline CI/CD](fotos/pipeline.png)
 
 **Resultado**: Si todo pasa, imprime `OK` en consola
 

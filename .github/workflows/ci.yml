@@ -12,19 +12,18 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      postgres:
-        image: postgres:14
+      mysql:
+        image: mysql:8.0
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: admin
-          POSTGRES_DB: sistema_eventos_test
+          MYSQL_ROOT_PASSWORD: admin
+          MYSQL_DATABASE: sistema_eventos_test
         ports:
-          - 5432:5432
+          - 3306:3306
         options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - name: Checkout código
@@ -45,8 +44,8 @@ jobs:
         run: |
           echo "NODE_ENV=test" >> $GITHUB_ENV
           echo "DB_HOST=localhost" >> $GITHUB_ENV
-          echo "DB_PORT=5432" >> $GITHUB_ENV
-          echo "DB_USER=postgres" >> $GITHUB_ENV
+          echo "DB_PORT=3306" >> $GITHUB_ENV
+          echo "DB_USER=root" >> $GITHUB_ENV
           echo "DB_PASSWORD=admin" >> $GITHUB_ENV
           echo "DB_NAME=sistema_eventos_test" >> $GITHUB_ENV
 
