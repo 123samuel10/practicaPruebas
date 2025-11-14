@@ -1,4 +1,9 @@
 const { Evento } = require("../models");
+const cache = require("memory-cache");
+
+const CACHE_KEY_EVENTOS = "lista_eventos";
+const CACHE_KEY_EVENTO = "evento_";
+const CACHE_TTL = 60 * 1000; // 60 segundos
 
 module.exports = {
   /**
@@ -13,15 +18,44 @@ module.exports = {
     }
     // Aquí podrías añadir más lógica, como evitar eventos duplicados.
 
-    return Evento.create(datosEvento);
+    const nuevoEvento = await Evento.create(datosEvento);
+
+    // Invalidar caché al crear un nuevo evento
+    cache.del(CACHE_KEY_EVENTOS);
+
+    return nuevoEvento;
   },
 
   async listarEventos() {
-    return Evento.findAll();
+    // Verificar si existe en caché
+    let eventos = cache.get(CACHE_KEY_EVENTOS);
+    if (eventos) return eventos;
+
+    // Si no existe en caché, consultar la BD
+    eventos = await Evento.findAll();
+
+    // Guardar en caché
+    cache.put(CACHE_KEY_EVENTOS, eventos, CACHE_TTL);
+
+    return eventos;
   },
 
   async obtenerEvento(id) {
-    return Evento.findByPk(id);
+    const cacheKey = CACHE_KEY_EVENTO + id;
+
+    // Verificar si existe en caché
+    let evento = cache.get(cacheKey);
+    if (evento) return evento;
+
+    // Si no existe en caché, consultar la BD
+    evento = await Evento.findByPk(id);
+
+    // Guardar en caché solo si se encontró
+    if (evento) {
+      cache.put(cacheKey, evento, CACHE_TTL);
+    }
+
+    return evento;
   },
 
   async actualizarEvento(id, datos) {
@@ -29,10 +63,22 @@ module.exports = {
     const evento = await Evento.findByPk(id);
     if (!evento) return [0]; // Devuelve 0 filas afectadas si no se encuentra
 
-    return Evento.update(datos, { where: { id } });
+    const resultado = await Evento.update(datos, { where: { id } });
+
+    // Invalidar caché al actualizar
+    cache.del(CACHE_KEY_EVENTOS);
+    cache.del(CACHE_KEY_EVENTO + id);
+
+    return resultado;
   },
 
   async eliminarEvento(id) {
-    return Evento.destroy({ where: { id } });
+    const resultado = await Evento.destroy({ where: { id } });
+
+    // Invalidar caché al eliminar
+    cache.del(CACHE_KEY_EVENTOS);
+    cache.del(CACHE_KEY_EVENTO + id);
+
+    return resultado;
   },
 };
