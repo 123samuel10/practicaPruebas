@@ -1,0 +1,9 @@
+{
+  "development": {
+    "username": "root",
+    "password": "tu_clave",
+    "database": "sistema_eventos",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
