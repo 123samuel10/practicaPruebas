@@ -1,4 +1,4 @@
-const { Asistencia, Evento, Participante } = require("../../models");
+const { Asistencia, Evento, Participante } = require("../models");
 const cache = require("memory-cache");
 
 const CACHE_KEY_ESTADISTICAS = "estadisticas_asistencias";
@@ -52,8 +52,11 @@ module.exports = {
     if (stats) return stats;
 
     stats = await Asistencia.findAll({
-      attributes: ["evento_id", [Asistencia.sequelize.fn("COUNT", "id"), "total_participantes"]],
-      group: ["evento_id"],
+      attributes: [
+        "evento_id",
+        [Asistencia.sequelize.fn("COUNT", Asistencia.sequelize.col("id")), "total_participantes"]
+      ],
+      group: ["evento_id", "evento.id"],
       include: [{ model: Evento, as: "evento", attributes: ["titulo", "capacidad"] }]
     });
 

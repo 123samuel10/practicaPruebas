@@ -1,4 +1,4 @@
-const { Participante, Asistencia } = require("../../models");
+const { Participante, Asistencia } = require("../models");
 
 module.exports = {
   async crearParticipante(datos) {

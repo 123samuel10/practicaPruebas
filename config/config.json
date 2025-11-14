@@ -1,9 +1,19 @@
 {
   "development": {
-    "username": "root",
-    "password": "tu_clave",
+    "username": "postgres",
+    "password": "admin",
     "database": "sistema_eventos",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "port": 5432,
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "admin",
+    "database": "sistema_eventos_test",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dialect": "postgres",
+    "logging": false
   }
 }
