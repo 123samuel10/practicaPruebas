@@ -16,7 +16,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       titulo: { type: DataTypes.STRING, allowNull: false },
       descripcion: { type: DataTypes.TEXT },
-      fecha: { type: DataTypes.DATE, allowNull: false }
+      fecha: { type: DataTypes.DATE, allowNull: false },
+      ubicacion: { type: DataTypes.STRING },
+      capacidad: { type: DataTypes.INTEGER }
     },
     {
       sequelize,
