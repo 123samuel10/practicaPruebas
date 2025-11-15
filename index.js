@@ -23,7 +23,7 @@ app.use('/api/asistencias', asistenciasRoutes);
 // Ruta de prueba
 app.get('/', (req, res) => {
   res.json({
-    message: 'API Sistema de Gestión de Eventos',
+    message: 'API Sistema de Gestiï¿½n de Eventos',
     endpoints: {
       eventos: '/api/eventos',
       participantes: '/api/participantes',
@@ -32,16 +32,18 @@ app.get('/', (req, res) => {
   });
 });
 
-// Sincronizar con la base de datos y arrancar el servidor
-db.sequelize.sync()
-  .then(() => {
-    console.log('Base de datos conectada');
-    app.listen(PORT, () => {
-      console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
+// Sincronizar con la base de datos y arrancar el servidor solo si no estamos en entorno de pruebas
+if (process.env.NODE_ENV !== 'test') {
+  db.sequelize.sync()
+    .then(() => {
+      console.log('Base de datos conectada');
+      app.listen(PORT, () => {
+        console.log(`Servidor ejecutÃ¡ndose en http://localhost:${PORT}`);
+      });
+    })
+    .catch(err => {
+      console.error('Error al conectar con la base de datos:', err);
     });
-  })
-  .catch(err => {
-    console.error('Error al conectar con la base de datos:', err);
-  });
+}
 
 module.exports = app;
