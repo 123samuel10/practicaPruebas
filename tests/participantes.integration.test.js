@@ -52,7 +52,7 @@ describe('API Participantes - Pruebas de Integración', () => {
         .send(participante)
         .expect(400);
 
-      expect(response.body.error).toContain('ya existe');
+      expect(response.body.error.toLowerCase()).toContain('ya existe');
     });
   });
 
